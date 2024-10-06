@@ -73,6 +73,27 @@ router.get('/matches', async (req, res) => {
     }
 });
 
+// New route for fetching basho details
+router.get('/basho/:bashoId', async (req, res) => {
+    const bashoId = req.params.bashoId;
+
+    try {
+        // Fetch data from the Sumo API for the specified bashoId
+        const response = await axios.get(`https://www.sumo-api.com/api/basho/${bashoId}`);
+
+        // Assuming the relevant data is within a property called 'data' in the response
+        const bashoData = response.data;
+
+        // Send the basho data as a JSON response
+        res.json(bashoData);
+    } catch (error) {
+        // Handle errors and send a response
+        console.error('Error fetching data from Sumo API:', error);
+        res.status(500).send('Error fetching data from Sumo API');
+    }
+});
+
+
 // Export the router to be used in other files
 module.exports = router;
 

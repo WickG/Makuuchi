@@ -6,6 +6,8 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 // Import the routes from the sumoRoutes file
 const sumoRoutes = require('./routes/sumoRoutes');
+// Load environment variables from .env file
+require('dotenv').config();
 
 // Mount the sumoRoutes at the '/api' base URL
 app.use('/api', sumoRoutes);
