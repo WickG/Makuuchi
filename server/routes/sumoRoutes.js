@@ -8,8 +8,8 @@ const router = express.Router();
 // Example route for getting a list of sumo wrestlers from the Sumo API
 router.get('/wrestlers', async (req, res) => {
     try {
-        // Fetch data from the Sumo API
-        const response = await axios.get('https://www.sumo-api.com/api/rikishis');
+        // Fetch data from the Sumo API using the base URL from the environment variable
+        const response = await axios.get(`${process.env.SUMO_API_BASE_URL}/rikishis`);
 
         // Log the full response data to understand its structure
         console.log('Full API Response Data:', response.data);
@@ -42,7 +42,7 @@ router.get('/wrestlers', async (req, res) => {
 router.get('/matches', async (req, res) => {
     try {
         // Fetch the list of all wrestlers
-        const wrestlersResponse = await axios.get('https://www.sumo-api.com/api/rikishis');
+        const wrestlersResponse = await axios.get(`${process.env.SUMO_API_BASE_URL}/rikishis`);
         const wrestlers = wrestlersResponse.data.records; // Access the records
 
         // Filter wrestlers by rank
@@ -57,7 +57,7 @@ router.get('/matches', async (req, res) => {
 
         // Loop through each filtered wrestler and fetch their matches
         for (const wrestler of filteredWrestlers) {
-            const matchesResponse = await axios.get(`https://www.sumo-api.com/api/rikishi/${wrestler.id}/matches`);
+            const matchesResponse = await axios.get(`${process.env.SUMO_API_BASE_URL}/rikishi/${wrestler.id}/matches`);
             const matches = matchesResponse.data.records || []; // Access matches or set as empty if undefined
 
             // Add the matches to the allMatches array
@@ -78,8 +78,8 @@ router.get('/basho/:bashoId', async (req, res) => {
     const bashoId = req.params.bashoId;
 
     try {
-        // Fetch data from the Sumo API for the specified bashoId
-        const response = await axios.get(`https://www.sumo-api.com/api/basho/${bashoId}`);
+        // Fetch data from the Sumo API for the specified bashoId using the base URL from the environment variable
+        const response = await axios.get(`${process.env.SUMO_API_BASE_URL}/basho/${bashoId}`);
 
         // Assuming the relevant data is within a property called 'data' in the response
         const bashoData = response.data;
@@ -92,7 +92,6 @@ router.get('/basho/:bashoId', async (req, res) => {
         res.status(500).send('Error fetching data from Sumo API');
     }
 });
-
 
 // Export the router to be used in other files
 module.exports = router;
